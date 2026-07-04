@@ -29,6 +29,7 @@
   html{scroll-behavior:smooth;}
 
   body{
+    padding-left:112px;
     background:
       linear-gradient(var(--grid-line) 1px, transparent 1px) 0 0/40px 40px,
       linear-gradient(90deg, var(--grid-line) 1px, transparent 1px) 0 0/40px 40px,
@@ -52,27 +53,57 @@
     position:sticky;
     top:0;
     z-index:50;
+    margin-left:-112px;
     background:rgba(244,247,251,0.88);
     backdrop-filter:blur(8px);
     border-bottom:1px solid var(--grid-line-strong);
   }
   .topbar-inner{
-    max-width:920px;
+    width:100%;
+    max-width:none;
     margin:0 auto;
-    padding:14px 24px;
-    display:flex;
-    justify-content:space-between;
+    padding:14px 30px;
+    display:grid;
+    grid-template-columns:1fr auto 1fr;
     align-items:center;
-    gap:12px;
+    gap:24px;
   }
   .brand-mini{
-    font-family:var(--mono-font);
-    font-size:12px;
-    letter-spacing:.08em;
-    color:var(--blue-primary);
+    display:none;
+    font-family:var(--display-font);
+    font-size:24px;
+    font-weight:700;
+    line-height:1;
+    letter-spacing:.02em;
+    color:var(--blue-deep);
     text-transform:uppercase;
   }
-  .controls{display:flex; gap:8px;}
+  .side-rail{
+    position:fixed;
+    inset:0 auto 0 0;
+    z-index:60;
+    width:112px;
+    background:var(--blue-primary);
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-right:1px solid var(--blue-deep);
+  }
+  .side-rail span{
+    font-family:var(--display-font);
+    font-size:44px;
+    font-weight:700;
+    letter-spacing:.12em;
+    line-height:1;
+    writing-mode:vertical-rl;
+    transform:rotate(180deg);
+  }
+  .page-nav{grid-column:2; display:flex; gap:8px; justify-content:center;}
+  .controls{grid-column:3; display:flex; gap:8px; justify-content:flex-end;}
+  .controls a.btn{display:inline-flex; align-items:center; text-decoration:none;}
+  .page-nav .btn{display:inline-flex; align-items:center; text-decoration:none;}
+  .page-nav .btn.active{background:var(--blue-primary); color:#fff;}
   .btn{
     font-family:var(--mono-font);
     font-size:12px;
@@ -181,7 +212,14 @@
     font-family:var(--mono-font);
     font-size:13px;
   }
-  .contact-list li{display:flex; gap:8px;}
+  .contact-list li{display:flex; align-items:center; gap:8px;}
+  .contact-icon{
+    width:24px;
+    height:24px;
+    flex:0 0 24px;
+    object-fit:contain;
+    display:block;
+  }
   .contact-list .label{color:var(--blue-primary); min-width:64px;}
 
   /* ===== Section frame ===== */
@@ -220,8 +258,8 @@
   /* ===== Education ===== */
   .edu-item{
     display:grid;
-    grid-template-columns:130px 1fr;
-    gap:28px;
+    grid-template-columns:160px 1fr;
+    gap:20px;
   }
   .edu-period{
     font-family:var(--mono-font);
@@ -234,6 +272,9 @@
     margin-top:6px;
     color:var(--muted);
     font-size:11.5px;
+    max-width:100%;
+    overflow-wrap:anywhere;
+    hyphens:auto;
   }
   .edu-school{
     font-family:var(--display-font);
@@ -246,13 +287,20 @@
     font-size:14.5px;
     color:var(--blue-primary);
     font-weight:500;
-    margin-bottom:10px;
+    margin-bottom:3px;
+  }
+  .edu-credential{
+    color:var(--muted);
+    font-size:13.5px;
+    margin-bottom:12px;
   }
   .edu-desc{
     color:var(--ink);
     font-size:14.5px;
     max-width:60ch;
+    white-space:pre-line;
   }
+  .edu-keywords{display:none;}
 
   /* ===== Qualifications ===== */
   .qual-grid{
@@ -306,6 +354,7 @@
     letter-spacing:.03em;
     text-transform:uppercase;
   }
+  .lang-print-level{display:none;}
 
   /* ===== IT skills ===== */
   .it-grid{
@@ -359,6 +408,10 @@
 
   /* ===== Responsive ===== */
   @media (max-width:640px){
+    body{padding-left:0;}
+    .topbar{margin-left:0;}
+    .side-rail{display:none;}
+    .brand-mini{display:block;}
     .hero-grid{grid-template-columns:1fr; gap:26px;}
     .photo-frame{max-width:200px;}
     .contact-list{grid-template-columns:1fr;}
@@ -366,37 +419,135 @@
     .qual-grid{grid-template-columns:1fr;}
     .lang-cards{grid-template-columns:1fr;}
     .it-grid{grid-template-columns:1fr;}
-    .topbar-inner{flex-direction:column; align-items:flex-start;}
+    .topbar-inner{grid-template-columns:1fr; align-items:start; gap:12px;}
+    .page-nav{grid-column:1; justify-content:flex-start;}
+    .controls{grid-column:1; justify-content:flex-start; flex-wrap:wrap;}
   }
 
   /* ===== Print ===== */
   @media print{
     @page{ margin:14mm; }
     body{
+      padding-left:22mm;
       background:#fff !important;
       color:#000;
     }
     .topbar{display:none;}
+    footer{display:none;}
+    .side-rail{
+      display:flex;
+      width:18mm;
+      background:var(--blue-primary) !important;
+      border-right:none;
+      -webkit-print-color-adjust:exact;
+      print-color-adjust:exact;
+    }
+    .side-rail span{font-size:30px;}
     .wrap{max-width:100%; padding:0;}
     .hero{padding:0 0 18px;}
     .section{padding:16px 0; border-top:1px solid #ccc; break-inside:avoid;}
+    .print-only{display:block !important;}
+    .about-print{padding:12px 0;}
+    .about-print .section-head{margin-bottom:10px;}
+    .about-copy{font-size:11.5px; line-height:1.45; max-width:76ch;}
+    .about-copy p + p{margin-top:7px;}
+    .print-page-start{break-before:page; page-break-before:always;}
     .section-line{background:none; border-top:1px dashed #999;}
     .photo-frame::before, .photo-frame::after{border-color:#0A2A43;}
     a{color:#000; text-decoration:none;}
     .name{color:#000;}
     .section-title, .edu-school{color:#000;}
-    .it-bar-fill{background:#0A2A43;}
+    .lang-rows{display:none;}
+    .lang-section{padding:8px 0;}
+    .lang-section .section-head{margin-bottom:8px;}
+    .lang-section .section-title{font-size:18px;}
+    .lang-section .lang-cards{gap:10px;}
+    .lang-section .lang-card{padding:8px 12px;}
+    .lang-print-level{
+      display:block;
+      font-family:var(--mono-font);
+      font-size:9.5px;
+      color:var(--blue-primary);
+      text-transform:uppercase;
+    }
+    .lang-card h3{margin-bottom:2px; font-size:14px;}
+    .edu-desc{display:none;}
+    .edu-keywords{
+      display:block;
+      color:#000;
+      font-size:12.5px;
+      line-height:1.5;
+      max-width:70ch;
+    }
+    .edu-print-summary{
+      display:block;
+      margin-bottom:10px;
+      font-size:11.5px;
+      line-height:1.5;
+    }
+    .edu-print-summary strong{color:var(--blue-primary);}
+    .edu-keywords-label{
+      display:block;
+      margin-bottom:4px;
+      font-family:var(--mono-font);
+      font-size:10.5px;
+      font-weight:600;
+      color:var(--blue-primary);
+      letter-spacing:.04em;
+      text-transform:uppercase;
+    }
+    .edu-keyword-list{
+      display:flex;
+      flex-wrap:wrap;
+      gap:5px;
+    }
+    .edu-keyword{
+      display:inline-flex;
+      align-items:center;
+      padding:3px 8px;
+      border:1px solid #9db3cc;
+      border-radius:999px;
+      background:#eef3f8 !important;
+      color:#0a2a43;
+      font-family:var(--mono-font);
+      font-size:9.5px;
+      line-height:1.25;
+      white-space:nowrap;
+      -webkit-print-color-adjust:exact;
+      print-color-adjust:exact;
+    }
+    .it-bar-track{
+      height:7px;
+      background:#dbe4ee !important;
+      border:1px solid #a9b8c8;
+      -webkit-print-color-adjust:exact;
+      print-color-adjust:exact;
+    }
+    .it-bar-fill{
+      background:#1B4F8C !important;
+      -webkit-print-color-adjust:exact;
+      print-color-adjust:exact;
+    }
     footer{margin-top:16px;}
   }
 
   [data-i18n]{transition:opacity .12s ease;}
+  .print-only{display:none;}
+  [data-lang="da"] [data-lang-copy="en"],
+  [data-lang="en"] [data-lang-copy="da"]{display:none;}
 </style>
 </head>
 <body>
 
+<aside class="side-rail" aria-label="CV"><span>CV</span></aside>
+
 <div class="topbar">
   <div class="topbar-inner">
-    <div class="brand-mini">RRT // CV.SYSTEM</div>
+    <div class="brand-mini">CV</div>
+    <nav class="page-nav" aria-label="Sider / Pages">
+      <a class="btn active" href="index.html" aria-current="page">CV</a>
+      <a class="btn" href="projects.html" data-i18n="projects_btn">Projekter</a>
+    </nav>
     <div class="controls">
       <div class="lang-group" role="group" aria-label="Sprogvalg / Language">
         <button class="btn" id="btn-da" aria-pressed="true" onclick="setLang('da')">DA</button>
@@ -418,20 +569,36 @@
           <img src="assets/rikke-photo.jpg" alt="Rikke René Thastum">
         </div>
         <div class="photo-caption">
-          <span>FIG. 01</span>
-          <span data-i18n="birthyear_label">FØDT 1997</span>
         </div>
       </div>
       <div class="hero-text">
-        <div class="eyebrow" data-i18n="eyebrow">cand.polyt. i robotteknologi</div>
         <h1 class="name">Rikke René Thastum</h1>
-        <p class="role" data-i18n="role_desc">Robotteknologistuderende med fokus på autonome systemer, computer vision og kunstig intelligens.</p>
+        <p class="role" data-i18n="role_desc">Civilingeniør i robotteknologi · cand.polyt. i robotteknologi</p>
         <ul class="contact-list">
-          <li><span class="label" data-i18n="label_address">ADRESSE</span><span>5220 Odense SØ</span></li>
-          <li><span class="label" data-i18n="label_phone">TELEFON</span><span>+45 50 56 17 03</span></li>
-          <li><span class="label" data-i18n="label_email">EMAIL</span><span><a href="mailto:r.thastum@gmail.com">r.thastum@gmail.com</a></span></li>
-          <li><span class="label" data-i18n="label_born">FØDT</span><span>1997</span></li>
+          <li><img class="contact-icon" src="assets/home2.svg" alt="Adresse"><span>5220 Odense SØ</span></li>
+          <li><img class="contact-icon" src="assets/phone.svg" alt="Telefon"><span>+45 50 56 17 03</span></li>
+          <li><img class="contact-icon" src="assets/email.svg" alt="Email"><span><a href="mailto:r.thastum@gmail.com">r.thastum@gmail.com</a></span></li>
+          <li><img class="contact-icon" src="assets/YEAR.svg" alt="Fødselsår"><span>1997</span></li>
         </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT ME: PRINT/PDF ONLY -->
+  <section class="section print-only about-print">
+    <div class="section-head">
+      <h2 class="section-title">
+        <span data-lang-copy="da">Om mig</span>
+        <span data-lang-copy="en">About me</span>
+      </h2>
+      <span class="section-line"></span>
+    </div>
+    <div class="about-copy">
+      <div data-lang-copy="da">
+        <p>Jeg er en 29-årig civilingeniør i robotteknologi fra SDU med en praktisk, kreativ og tværfaglig tilgang til udvikling. Jeg arbejder engageret, struktureret og samarbejdsorienteret og er altid klar på nye udfordringer. I min fritid dyrker jeg mange kreative hobbyer, som afspejler min nysgerrighed og glæde ved at skabe.</p>
+      </div>
+      <div data-lang-copy="en">
+        <p>I am a 29-year-old robotics engineer from SDU with a practical, creative and interdisciplinary approach to development. I work with commitment, structure and a collaborative mindset, and I am always ready for new challenges. In my spare time, I pursue many creative hobbies that reflect my curiosity and enjoyment of creating.</p>
       </div>
     </div>
   </section>
@@ -439,43 +606,45 @@
   <!-- EDUCATION -->
   <section class="section">
     <div class="section-head">
-      <span class="section-tag">§01</span>
       <h2 class="section-title" data-i18n="sec_education">Uddannelse</h2>
       <span class="section-line"></span>
     </div>
     <div class="edu-item">
       <div class="edu-period">
-        2020 — 2026
-        <span class="edu-degree-level" data-i18n="edu_level">Lang videregående uddannelse</span>
+        2020 – 2026
+        <span class="edu-degree-level" data-i18n="edu_level">Civilingeniøruddannelse</span>
       </div>
       <div>
         <div class="edu-school">Syddansk Universitet (SDU)</div>
-        <div class="edu-program" data-i18n="edu_program">Robotteknologi — Kandidatuddannelse</div>
-        <p class="edu-desc" data-i18n="edu_desc">Uddannelsen har givet mig specialiseret viden inden for robotteknologi, automation, autonome systemer og kunstig intelligens. Jeg har arbejdet med programmering, elektronik, computer vision, indlejrede systemer og modellering samt udvikling af løsninger, hvor software og hardware integreres i praksis. Derudover har uddannelsen haft et stærkt projektbaseret fokus, hvor vi hvert semester har arbejdet i teams om større tekniske projekter fra idé og analyse til udvikling, test og præsentation.</p>
+        <div class="edu-program" data-i18n="edu_program">Robotteknologi – bachelor- og kandidatuddannelse</div>
+        <div class="edu-credential" data-i18n="edu_credential">Civilingeniør i robotteknologi · cand.polyt.</div>
+        <p class="edu-desc" data-i18n="edu_desc">Gennem bachelor- og kandidatuddannelsen har jeg opnået en bred og specialiseret teknisk viden inden for robotteknologi, automation, autonome systemer og kunstig intelligens. Jeg har arbejdet med blandt andet programmering, elektronik, computer vision, indlejrede systemer og 3D-modellering samt udvikling af løsninger, hvor software og hardware integreres i praksis.
+
+Uddannelsens alsidige og tværfaglige karakter har givet mig en bred teknisk forståelse og styrket min evne til hurtigt at sætte mig ind i nye teknologier, tilpasse mig forskellige problemstillinger og tilegne mig ny viden.
+
+Uddannelsen har desuden haft et stærkt projektbaseret fokus, hvor vi hvert semester har arbejdet i teams med større tekniske projekter – fra idé og analyse til udvikling, test og præsentation.</p>
+        <p class="edu-keywords">
+          <span class="edu-print-summary">
+            <span data-lang-copy="da">Uddannelsen har givet mig en bred og specialiseret teknisk forståelse inden for <strong>robotteknologi</strong>, <strong>automation</strong>, <strong>autonome systemer</strong> og <strong>kunstig intelligens</strong>. Gennem tværfaglige semesterprojekter har jeg udviklet og integreret <strong>software- og hardwareløsninger</strong> fra idé og analyse til test og præsentation.</span>
+            <span data-lang-copy="en">The programmes have given me a broad and specialised technical understanding of <strong>robotics</strong>, <strong>automation</strong>, <strong>autonomous systems</strong> and <strong>artificial intelligence</strong>. Through interdisciplinary semester projects, I have developed and integrated <strong>software and hardware solutions</strong> from concept and analysis to testing and presentation.</span>
+          </span>
+          <span class="edu-keywords-label" data-i18n="edu_keywords_label">Faglige nøgleord</span>
+          <span class="edu-keyword-list" id="edu-keyword-list"></span>
+        </p>
       </div>
     </div>
   </section>
 
-  <!-- QUALIFICATIONS -->
-  <section class="section">
-    <div class="section-head">
-      <span class="section-tag">§02</span>
-      <h2 class="section-title" data-i18n="sec_qualifications">Kvalifikationer</h2>
-      <span class="section-line"></span>
-    </div>
-    <div class="qual-grid" id="qual-grid"></div>
-  </section>
-
   <!-- LANGUAGES -->
-  <section class="section">
+  <section class="section lang-section">
     <div class="section-head">
-      <span class="section-tag">§03</span>
       <h2 class="section-title" data-i18n="sec_languages">Sprog</h2>
       <span class="section-line"></span>
     </div>
     <div class="lang-cards">
       <div class="lang-card">
         <h3 data-i18n="lang_da">Dansk</h3>
+        <span class="lang-print-level" data-i18n="level_fluent">Flydende</span>
         <div class="lang-rows">
           <div class="lang-row"><span class="skill-name" data-i18n="skill_understand">Forståelse</span><span class="skill-level" data-i18n="level_native">Flydende/modersmål</span></div>
           <div class="lang-row"><span class="skill-name" data-i18n="skill_speak">Tale</span><span class="skill-level" data-i18n="level_native">Flydende/modersmål</span></div>
@@ -485,6 +654,7 @@
       </div>
       <div class="lang-card">
         <h3 data-i18n="lang_en">Engelsk</h3>
+        <span class="lang-print-level" data-i18n="level_fluent">Flydende</span>
         <div class="lang-rows">
           <div class="lang-row"><span class="skill-name" data-i18n="skill_understand">Forståelse</span><span class="skill-level" data-i18n="level_native">Flydende/modersmål</span></div>
           <div class="lang-row"><span class="skill-name" data-i18n="skill_speak">Tale</span><span class="skill-level" data-i18n="level_native">Flydende/modersmål</span></div>
@@ -495,10 +665,18 @@
     </div>
   </section>
 
+  <!-- QUALIFICATIONS -->
+  <section class="section print-page-start">
+    <div class="section-head">
+      <h2 class="section-title" data-i18n="sec_qualifications">Kvalifikationer</h2>
+      <span class="section-line"></span>
+    </div>
+    <div class="qual-grid" id="qual-grid"></div>
+  </section>
+
   <!-- IT EXPERIENCE -->
   <section class="section">
     <div class="section-head">
-      <span class="section-tag">§04</span>
       <h2 class="section-title" data-i18n="sec_it">IT-erfaring</h2>
       <span class="section-line"></span>
     </div>
@@ -514,6 +692,21 @@
 
 <script>
   // ---------- Data ----------
+  const educationKeywords = [
+    {da:"Robotteknologi", en:"Robotics"},
+    {da:"Automation", en:"Automation"},
+    {da:"Autonome systemer", en:"Autonomous systems"},
+    {da:"Kunstig intelligens", en:"Artificial intelligence"},
+    {da:"Computer vision", en:"Computer vision"},
+    {da:"Programmering", en:"Programming"},
+    {da:"Elektronik", en:"Electronics"},
+    {da:"Indlejrede systemer", en:"Embedded systems"},
+    {da:"Modellering", en:"Modelling"},
+    {da:"Systemintegration", en:"Systems integration"},
+    {da:"Teknisk problemløsning", en:"Technical problem-solving"},
+    {da:"Tværfagligt projektarbejde", en:"Interdisciplinary project work"}
+  ];
+
   const qualifications = [
     {da:"Mekanisk og softwaremæssig integration", en:"Mechanical and software integration"},
     {da:"Erfaring med programmering og systemforståelse", en:"Experience with programming and systems understanding"},
@@ -530,39 +723,50 @@
   ];
 
   const itSkills = [
-    {name:"Python",     level:"expert",       pct:95},
-    {name:"LaTeX",      level:"expert",       pct:95},
-    {name:"Matlab",     level:"proficient",   pct:70},
-    {name:"C++",        level:"proficient",   pct:70},
-    {name:"MySQL",      level:"basic",        pct:40},
-    {name:"Assembly",   level:"basic",        pct:40},
-    {name:"Java",       level:"basic",        pct:40},
-    {name:"VHDL",       level:"basic",        pct:40},
-    {name:"C#",         level:"basic",        pct:40},
-    {name:"HTML & CSS", level:"basic",        pct:40}
+    {name:"Python",              level:"expert",       pct:100},
+    {name:"LaTeX",               level:"expert",       pct:100},
+    {name:"C++ / C# / C",        level:"expert",       pct:100},
+    {name:"Microsoft Office",    level:"expert",       pct:100},
+    {name:"AI / Machine Learning", level:"expert",     pct:100},
+    {name:"HTML & CSS",          level:"advanced",     pct:75},
+    {name:"Git",                 level:"advanced",     pct:75},
+    {name:"Linux / Ubuntu",      level:"advanced",     pct:75},
+    {name:"Matlab",              level:"proficient",   pct:50},
+    {name:"MySQL",               level:"proficient",   pct:50},
+    {name:"Assembly",            level:"proficient",   pct:50},
+    {name:"Gazebo",              level:"proficient",   pct:50},
+    {name:"ROS",                 level:"proficient",   pct:50},
+    {name:"Mathematica",         level:"proficient",   pct:50},
+    {name:"Simulink",            level:"proficient",   pct:50},
+    {name:"Java",                level:"basic",        pct:25},
+    {name:"VHDL",                level:"basic",        pct:25},
+    {name:"R",                   level:"basic",        pct:25}
   ];
 
   const levelLabel = {
-    da:{expert:"Ekspert", proficient:"Øvet", basic:"Let øvet"},
-    en:{expert:"Expert", proficient:"Proficient", basic:"Basic"}
+    da:{expert:"Ekspert", advanced:"Avanceret", proficient:"Øvet", basic:"Let øvet"},
+    en:{expert:"Expert", advanced:"Advanced", proficient:"Proficient", basic:"Basic"}
   };
 
   const translations = {
     print_btn:{da:"Print CV", en:"Print CV"},
+    projects_btn:{da:"Projekter", en:"Projects"},
     birthyear_label:{da:"FØDT 1997", en:"BORN 1997"},
     eyebrow:{da:"cand.polyt. i robotteknologi", en:"Master of Science in Engineering (Robot Systems)"},
-    role_desc:{da:"Robotteknologistuderende med fokus på autonome systemer, computer vision og kunstig intelligens.",
-               en:"Robotics engineering student focused on autonomous systems, computer vision and artificial intelligence."},
+    role_desc:{da:"Civilingeniør i robotteknologi · cand.polyt. i robotteknologi",
+               en:"Master of Science in Engineering (Robot Systems), MSc"},
     label_address:{da:"ADRESSE", en:"ADDRESS"},
     label_phone:{da:"TELEFON", en:"PHONE"},
     label_email:{da:"EMAIL", en:"EMAIL"},
     label_born:{da:"FØDT", en:"BORN"},
     sec_education:{da:"Uddannelse", en:"Education"},
-    edu_level:{da:"Lang videregående uddannelse", en:"Long-cycle higher education (MSc)"},
-    edu_program:{da:"Robotteknologi — Kandidatuddannelse", en:"Robotics Engineering — MSc programme"},
+    edu_level:{da:"Civilingeniøruddannelse", en:"Engineering degree"},
+    edu_program:{da:"Robotteknologi – bachelor- og kandidatuddannelse", en:"Robotics Engineering – BSc and MSc programmes"},
+    edu_credential:{da:"Civilingeniør i robotteknologi · cand.polyt.", en:"Master of Science in Engineering (Robot Systems) · MSc"},
+    edu_keywords_label:{da:"Faglige nøgleord", en:"Academic keywords"},
     edu_desc:{
-      da:"Uddannelsen har givet mig specialiseret viden inden for robotteknologi, automation, autonome systemer og kunstig intelligens. Jeg har arbejdet med programmering, elektronik, computer vision, indlejrede systemer og modellering samt udvikling af løsninger, hvor software og hardware integreres i praksis. Derudover har uddannelsen haft et stærkt projektbaseret fokus, hvor vi hvert semester har arbejdet i teams om større tekniske projekter fra idé og analyse til udvikling, test og præsentation.",
-      en:"The programme has given me specialised knowledge within robotics, automation, autonomous systems and artificial intelligence. I have worked with programming, electronics, computer vision, embedded systems and modelling, as well as developing solutions where software and hardware are integrated in practice. The programme has also had a strong project-based focus, with team-based work each semester on larger technical projects — from idea and analysis to development, testing and presentation."
+      da:"Gennem bachelor- og kandidatuddannelsen har jeg opnået en bred og specialiseret teknisk viden inden for robotteknologi, automation, autonome systemer og kunstig intelligens. Jeg har arbejdet med blandt andet programmering, elektronik, computer vision, indlejrede systemer og 3D-modellering samt udvikling af løsninger, hvor software og hardware integreres i praksis.\n\nUddannelsens alsidige og tværfaglige karakter har givet mig en bred teknisk forståelse og styrket min evne til hurtigt at sætte mig ind i nye teknologier, tilpasse mig forskellige problemstillinger og tilegne mig ny viden.\n\nUddannelsen har desuden haft et stærkt projektbaseret fokus, hvor vi hvert semester har arbejdet i teams med større tekniske projekter – fra idé og analyse til udvikling, test og præsentation.",
+      en:"Through the bachelor's and master's programmes, I have gained broad and specialised technical knowledge in robotics, automation, autonomous systems and artificial intelligence. I have worked with areas including programming, electronics, computer vision, embedded systems and 3D modelling, as well as developing solutions that integrate software and hardware in practice.\n\nThe versatile and interdisciplinary nature of the programmes has given me a broad technical understanding and strengthened my ability to quickly familiarise myself with new technologies, adapt to different challenges and acquire new knowledge.\n\nThe programmes have also had a strong project-based focus, with team-based work each semester on larger technical projects – from idea and analysis to development, testing and presentation."
     },
     sec_qualifications:{da:"Kvalifikationer", en:"Qualifications"},
     sec_languages:{da:"Sprog", en:"Languages"},
@@ -573,6 +777,7 @@
     skill_read:{da:"Læse", en:"Reading"},
     skill_write:{da:"Skrive", en:"Writing"},
     level_native:{da:"Flydende/modersmål", en:"Fluent/native"},
+    level_fluent:{da:"Flydende", en:"Fluent"},
     sec_it:{da:"IT-erfaring", en:"IT experience"}
   };
 
@@ -584,6 +789,12 @@
         <span>${q[lang]}</span>
       </div>
     `).join('');
+  }
+
+  function buildEducationKeywords(lang){
+    document.getElementById('edu-keyword-list').innerHTML = educationKeywords
+      .map(keyword => `<span class="edu-keyword">${keyword[lang]}</span>`)
+      .join('');
   }
 
   function buildItSkills(lang){
@@ -607,6 +818,7 @@
     document.getElementById('btn-da').setAttribute('aria-pressed', lang === 'da');
     document.getElementById('btn-en').setAttribute('aria-pressed', lang === 'en');
     buildQualifications(lang);
+    buildEducationKeywords(lang);
     buildItSkills(lang);
     document.title = lang === 'da' ? 'Rikke René Thastum — CV' : 'Rikke René Thastum — CV (English)';
     localStorage.setItem('cv-lang', lang);
