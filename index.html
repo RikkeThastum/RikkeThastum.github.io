@@ -99,6 +99,9 @@
     writing-mode:vertical-rl;
     transform:rotate(180deg);
   }
+  .print-page{display:contents;}
+  .print-page-rail{display:none;}
+  .print-page-number{display:none;}
   .page-nav{grid-column:2; display:flex; gap:8px; justify-content:center;}
   .controls{grid-column:3; display:flex; gap:8px; justify-content:flex-end;}
   .controls a.btn{display:inline-flex; align-items:center; text-decoration:none;}
@@ -426,23 +429,59 @@
 
   /* ===== Print ===== */
   @media print{
-    @page{ margin:14mm; }
+    @page{
+      size:A4;
+      margin:0;
+    }
     body{
-      padding-left:22mm;
+      padding:14mm 14mm 14mm 36mm;
       background:#fff !important;
       color:#000;
     }
     .topbar{display:none;}
     footer{display:none;}
     .side-rail{
+      display:none;
+    }
+    .print-page{
+      display:block;
+      position:relative;
+      min-height:269mm;
+    }
+    .print-page-number{
+      display:block;
+      position:absolute;
+      right:0;
+      bottom:3mm;
+      font-family:var(--mono-font);
+      font-size:9px;
+      color:var(--muted);
+    }
+    .print-page-rail{
       display:flex;
+      position:absolute;
+      left:-22mm;
+      top:0;
       width:18mm;
+      height:269mm;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
       background:var(--blue-primary) !important;
-      border-right:none;
+      color:#fff;
       -webkit-print-color-adjust:exact;
       print-color-adjust:exact;
     }
-    .side-rail span{font-size:30px;}
+    .print-page-rail span{
+      font-family:var(--display-font);
+      font-size:22px;
+      font-weight:700;
+      letter-spacing:.08em;
+      line-height:1;
+      text-transform:uppercase;
+      writing-mode:vertical-rl;
+      transform:rotate(180deg);
+    }
     .wrap{max-width:100%; padding:0;}
     .hero{padding:0 0 18px;}
     .section{padding:16px 0; border-top:1px solid #ccc; break-inside:avoid;}
@@ -560,6 +599,10 @@
 
 <div class="wrap">
 
+  <div class="print-page print-page-one">
+    <aside class="print-page-rail" aria-hidden="true"><span data-lang-copy="da">Om mig</span><span data-lang-copy="en">About me</span></aside>
+    <span class="print-page-number" aria-hidden="true">1 / 2</span>
+
   <!-- HERO -->
   <section class="hero">
     <div class="hero-grid">
@@ -665,8 +708,14 @@ Uddannelsen har desuden haft et stærkt projektbaseret fokus, hvor vi hvert seme
     </div>
   </section>
 
+  </div>
+
+  <div class="print-page print-page-two print-page-start">
+    <aside class="print-page-rail" aria-hidden="true"><span data-lang-copy="da">Kompetencer</span><span data-lang-copy="en">Competencies</span></aside>
+    <span class="print-page-number" aria-hidden="true">2 / 2</span>
+
   <!-- QUALIFICATIONS -->
-  <section class="section print-page-start">
+  <section class="section">
     <div class="section-head">
       <h2 class="section-title" data-i18n="sec_qualifications">Kvalifikationer</h2>
       <span class="section-line"></span>
@@ -682,6 +731,8 @@ Uddannelsen har desuden haft et stærkt projektbaseret fokus, hvor vi hvert seme
     </div>
     <div class="it-grid" id="it-grid"></div>
   </section>
+
+  </div>
 
   <footer>
     <span>Rikke René Thastum — CV</span>
